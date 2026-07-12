@@ -1,7 +1,8 @@
 # Stock Trading App – Features Documentation
-Stock Trading App is a MERN Stack application that enables users to practice stock trading using virtual money. It provides a realistic trading experience without financial risk.
 
-## 1. Authentication
+The Stock Trading App is a web-based paper trading platform developed using the MERN Stack. It enables users to simulate stock market trading with virtual money, helping them learn investment strategies and market behavior without financial risk. The application includes authentication, portfolio management, stock trading, and transaction tracking features.
+
+## 1.Authentication
 
 ### User Registration
 
@@ -15,7 +16,7 @@ Registered users can log in using their email address and password. Authenticati
 
 Users can securely log out of their account when they finish using the platform. This helps protect account data, especially when accessing the application from shared devices.
 
-## 2. Dashboard
+## 2.Dashboard
 
 ### Virtual Balance
 
@@ -45,7 +46,7 @@ Market status informs users whether the stock market is currently open or closed
 
 Quick action buttons provide direct access to common tasks such as buying stocks, selling stocks, viewing the portfolio, and checking transaction history.
 
-## 3. Stock Market
+## 3.Stock Market
 
 ### View Available Stocks
 
@@ -67,7 +68,7 @@ Stocks can be sorted by fields such as company name, current price, or stock sym
 
 Users can add selected stocks to a personal watchlist. The watchlist allows users to monitor preferred stocks before deciding whether to buy them.
 
-## 4. Trading
+## 4.Trading
 
 ### Buy Stocks
 
@@ -81,7 +82,7 @@ Users can sell stocks that they currently own in their portfolio. The system ver
 
 Before a trade is completed, the application validates the latest available stock price. This helps ensure that buying and selling calculations use current market data.
 
-## 5. Portfolio
+## 5.Portfolio
 
 ### Holdings
 
@@ -99,7 +100,7 @@ Portfolio allocation shows how the user's investments are distributed across dif
 
 Net worth combines the available virtual balance with the current value of all portfolio holdings. It provides an overall measure of the user’s paper trading performance.
 
-## 6. Transactions
+## 6.Transactions
 
 ### Transaction History
 
@@ -113,13 +114,13 @@ Transaction filters allow users to narrow records by transaction type, stock, or
 
 Users can export their transaction history as a CSV file. This supports offline analysis, record keeping, and reporting of paper trading performance.
 
-## 7. Leaderboard
+## 7.Leaderboard
 
 ### Top Traders
 
 The leaderboard displays the highest-performing users based on portfolio value, net worth, or profit. It encourages friendly competition and motivates users to improve their trading strategies.
 
-## 8. User Profile
+## 8.User Profile
 
 ### User Details
 
@@ -129,7 +130,7 @@ Users can view and manage their basic profile information, such as full name and
 
 Users can reset their paper trading account to start again with the default virtual balance. This feature is useful for practicing new strategies without creating a new account.
 
-## 9. UI Features
+## 9.UI Features
 
 ### Responsive Design
 
