@@ -1,220 +1,235 @@
-import React, { useState, useMemo } from "react";
-import { FiArrowUp, FiArrowDown, FiCheck, FiX, FiList } from "react-icons/fi";
-import { useGeneralContext } from "../context/GeneralContext";
-import axiosInstance from "../api/axiosInstance";
 
-const AllOrders = () => {
-  const { orders, setOrders } = useGeneralContext();
-  const [filter, setFilter] = useState("ALL");
+import React from "react";
+import { Link } from "react-router-dom";
+import "./AllOrders.css";
 
-  const filtered = useMemo(() => {
-    if (filter === "ALL") return orders;
-    return orders.filter((o) => o.status === filter);
-  }, [orders, filter]);
-
-  const sorted = useMemo(
-    () => [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date)),
-    [filtered]
-  );
-
-  const formatDate = (iso) =>
-    new Date(iso).toLocaleString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-  const updateStatus = async (id, status) => {
-    try {
-      await axiosInstance.put(`/admin/orders/${id}`, { status });
-    } catch (err) {
-      // backend unavailable, update locally
-    }
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
-  };
+function AllOrders() {
+  const orders = [
+    {
+      id: "ORD-1001",
+      stock: "Apple Inc.",
+      symbol: "AAPL",
+      type: "Buy",
+      quantity: 12,
+      price: "$214.35",
+      date: "Jul 12, 2026",
+      status: "Completed",
+    },
+    {
+      id: "ORD-1002",
+      stock: "Tesla Inc.",
+      symbol: "TSLA",
+      type: "Sell",
+      quantity: 8,
+      price: "$328.40",
+      date: "Jul 11, 2026",
+      status: "Completed",
+    },
+    {
+      id: "ORD-1003",
+      stock: "NVIDIA Corp.",
+      symbol: "NVDA",
+      type: "Buy",
+      quantity: 15,
+      price: "$164.80",
+      date: "Jul 10, 2026",
+      status: "Pending",
+    },
+    {
+      id: "ORD-1004",
+      stock: "Microsoft Corp.",
+      symbol: "MSFT",
+      type: "Buy",
+      quantity: 10,
+      price: "$498.20",
+      date: "Jul 9, 2026",
+      status: "Completed",
+    },
+    {
+      id: "ORD-1005",
+      stock: "Amazon.com Inc.",
+      symbol: "AMZN",
+      type: "Sell",
+      quantity: 6,
+      price: "$224.60",
+      date: "Jul 8, 2026",
+      status: "Cancelled",
+    },
+    {
+      id: "ORD-1006",
+      stock: "Alphabet Inc.",
+      symbol: "GOOGL",
+      type: "Buy",
+      quantity: 18,
+      price: "$186.15",
+      date: "Jul 7, 2026",
+      status: "Completed",
+    },
+    {
+      id: "ORD-1007",
+      stock: "Meta Platforms",
+      symbol: "META",
+      type: "Sell",
+      quantity: 7,
+      price: "$715.30",
+      date: "Jul 6, 2026",
+      status: "Pending",
+    },
+    {
+      id: "ORD-1008",
+      stock: "Netflix Inc.",
+      symbol: "NFLX",
+      type: "Buy",
+      quantity: 5,
+      price: "$1,192.50",
+      date: "Jul 5, 2026",
+      status: "Completed",
+    },
+    {
+      id: "ORD-1009",
+      stock: "Advanced Micro Devices",
+      symbol: "AMD",
+      type: "Sell",
+      quantity: 20,
+      price: "$182.75",
+      date: "Jul 4, 2026",
+      status: "Cancelled",
+    },
+    {
+      id: "ORD-1010",
+      stock: "Palantir Technologies",
+      symbol: "PLTR",
+      type: "Buy",
+      quantity: 30,
+      price: "$148.90",
+      date: "Jul 3, 2026",
+      status: "Completed",
+    },
+  ];
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div>
-          <h2 style={styles.title}>All Orders</h2>
-          <p style={styles.subtitle}>Review and manage orders placed across the platform.</p>
-        </div>
-        <div style={styles.filterGroup}>
-          {["ALL", "PENDING", "APPROVED", "REJECTED"].map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              style={{ ...styles.filterBtn, ...(filter === f ? styles.filterBtnActive : {}) }}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-      </div>
+    <main className="all-orders-page">
+      <div style={{ marginBottom: "20px" }}>
+  <Link
+    to="/dashboard"
+    style={{
+      color: "#91aaff",
+      textDecoration: "none",
+      fontWeight: "bold",
+      fontSize: "16px",
+    }}
+  >
+    ← Back to Dashboard
+  </Link>
+</div>
+      <section className="all-orders-container">
+        <header className="all-orders-header">
+          <span className="all-orders-eyebrow">Administration</span>
+          <h1>All Orders</h1>
+          <p>Monitor and manage trading orders placed across the platform.</p>
+        </header>
 
-      <div style={styles.tableWrap}>
-        {sorted.length === 0 ? (
-          <div style={styles.emptyState}>
-            <FiList size={32} color="#94a3b8" />
-            <p>No orders found.</p>
-          </div>
-        ) : (
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th style={styles.th}>Date</th>
-                <th style={styles.th}>Stock</th>
-                <th style={styles.th}>Type</th>
-                <th style={styles.th}>Qty</th>
-                <th style={styles.th}>Price</th>
-                <th style={styles.th}>Status</th>
-                <th style={styles.th}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sorted.map((o) => (
-                <tr key={o.id} style={styles.tr}>
-                  <td style={styles.td}>{formatDate(o.date)}</td>
-                  <td style={{ ...styles.td, fontWeight: 700 }}>{o.symbol}</td>
-                  <td style={styles.td}>
-                    <span
-                      style={{
-                        ...styles.badge,
-                        background: o.type === "BUY" ? "rgba(34,197,94,0.1)" : "rgba(239,68,68,0.1)",
-                        color: o.type === "BUY" ? "#16a34a" : "#dc2626",
-                      }}
-                    >
-                      {o.type === "BUY" ? <FiArrowUp size={12} /> : <FiArrowDown size={12} />}
-                      {o.type}
-                    </span>
-                  </td>
-                  <td style={styles.td}>{o.qty}</td>
-                  <td style={styles.td}>₹{o.price.toLocaleString("en-IN")}</td>
-                  <td style={styles.td}>
-                    <span
-                      style={{
-                        ...styles.statusBadge,
-                        background:
-                          o.status === "PENDING"
-                            ? "rgba(245,158,11,0.1)"
-                            : o.status === "APPROVED"
-                            ? "rgba(34,197,94,0.1)"
-                            : "rgba(239,68,68,0.1)",
-                        color:
-                          o.status === "PENDING" ? "#d97706" : o.status === "APPROVED" ? "#16a34a" : "#dc2626",
-                      }}
-                    >
-                      {o.status}
-                    </span>
-                  </td>
-                  <td style={styles.td}>
-                    {o.status === "PENDING" ? (
-                      <div style={{ display: "flex", gap: "8px" }}>
-                        <button style={styles.approveBtn} onClick={() => updateStatus(o.id, "APPROVED")}>
-                          <FiCheck size={14} />
-                        </button>
-                        <button style={styles.rejectBtn} onClick={() => updateStatus(o.id, "REJECTED")}>
-                          <FiX size={14} />
-                        </button>
-                      </div>
-                    ) : (
-                      <span style={{ color: "#94a3b8", fontSize: "12.5px" }}>—</span>
-                    )}
-                  </td>
+        <section className="all-orders-controls">
+          <label className="orders-search-field">
+            <span className="orders-search-label">Search orders</span>
+            <input
+              type="search"
+              placeholder="Search orders..."
+              aria-label="Search orders"
+            />
+          </label>
+
+          <label className="orders-filter-field">
+            <span className="orders-filter-label">Order type</span>
+            <select aria-label="Filter orders by type" defaultValue="All">
+              <option value="All">All</option>
+              <option value="Buy">Buy</option>
+              <option value="Sell">Sell</option>
+            </select>
+          </label>
+        </section>
+
+        <section className="orders-table-section">
+          <div className="orders-table-wrapper">
+            <table className="orders-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Stock</th>
+                  <th>Type</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Order Date</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-    </div>
-  );
-};
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id}>
+                    <td data-label="Order ID">
+                      <span className="order-id">{order.id}</span>
+                    </td>
+                    <td data-label="Stock">
+                      <div className="order-stock-details">
+                        <strong>{order.stock}</strong>
+                        <span>{order.symbol}</span>
+                      </div>
+                    </td>
+                    <td data-label="Type">
+                      <span
+                        className={`order-type ${
+                          order.type === "Buy"
+                            ? "order-type-buy"
+                            : "order-type-sell"
+                        }`}
+                      >
+                        {order.type}
+                      </span>
+                    </td>
+                    <td data-label="Quantity">{order.quantity}</td>
+                    <td data-label="Price">{order.price}</td>
+                    <td data-label="Order Date">{order.date}</td>
+                    <td data-label="Status">
+                      <span
+                        className={`order-status ${
+                          order.status === "Completed"
+                            ? "order-status-completed"
+                            : order.status === "Pending"
+                              ? "order-status-pending"
+                              : "order-status-cancelled"
+                        }`}
+                      >
+                        {order.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-const styles = {
-  page: { padding: "24px", maxWidth: "1200px", margin: "0 auto" },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    flexWrap: "wrap",
-    gap: "16px",
-    marginBottom: "20px",
-  },
-  title: { fontSize: "24px", fontWeight: 700, color: "#0f172a", margin: 0 },
-  subtitle: { color: "#64748b", fontSize: "14px", marginTop: "4px" },
-  filterGroup: { display: "flex", gap: "8px", background: "#e2e8f0", borderRadius: "10px", padding: "4px", flexWrap: "wrap" },
-  filterBtn: {
-    border: "none",
-    background: "transparent",
-    padding: "8px 14px",
-    borderRadius: "8px",
-    fontSize: "12.5px",
-    fontWeight: 600,
-    color: "#475569",
-    cursor: "pointer",
-  },
-  filterBtnActive: { background: "#fff", color: "#0f172a", boxShadow: "0 1px 4px rgba(0,0,0,0.1)" },
-  tableWrap: {
-    background: "#fff",
-    borderRadius: "14px",
-    overflow: "auto",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.05)",
-  },
-  table: { width: "100%", borderCollapse: "collapse", minWidth: "760px" },
-  th: {
-    textAlign: "left",
-    padding: "14px 16px",
-    fontSize: "12px",
-    textTransform: "uppercase",
-    color: "#64748b",
-    borderBottom: "1px solid #e2e8f0",
-  },
-  tr: { borderBottom: "1px solid #f1f5f9" },
-  td: { padding: "14px 16px", fontSize: "14px", color: "#0f172a" },
-  badge: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "4px",
-    padding: "4px 10px",
-    borderRadius: "20px",
-    fontSize: "12px",
-    fontWeight: 700,
-  },
-  statusBadge: {
-    display: "inline-block",
-    padding: "4px 10px",
-    borderRadius: "20px",
-    fontSize: "11.5px",
-    fontWeight: 700,
-  },
-  approveBtn: {
-    background: "rgba(34,197,94,0.1)",
-    color: "#16a34a",
-    border: "none",
-    padding: "6px 10px",
-    borderRadius: "8px",
-    cursor: "pointer",
-  },
-  rejectBtn: {
-    background: "rgba(239,68,68,0.1)",
-    color: "#dc2626",
-    border: "none",
-    padding: "6px 10px",
-    borderRadius: "8px",
-    cursor: "pointer",
-  },
-  emptyState: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "10px",
-    padding: "48px 24px",
-    color: "#64748b",
-  },
-};
+          <nav className="orders-pagination" aria-label="Orders pages">
+            <button type="button" className="orders-pagination-button">
+              Previous
+            </button>
+            <button
+              type="button"
+              className="orders-pagination-button orders-pagination-active"
+            >
+              1
+            </button>
+            <button type="button" className="orders-pagination-button">
+              2
+            </button>
+            <button type="button" className="orders-pagination-button">
+              Next
+            </button>
+          </nav>
+        </section>
+      </section>
+    </main>
+  );
+}
 
 export default AllOrders;
+

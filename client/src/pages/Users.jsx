@@ -1,179 +1,171 @@
-import React, { useState, useMemo } from "react";
-import { FiSearch, FiUser, FiShield, FiTrash2 } from "react-icons/fi";
-import { useGeneralContext } from "../context/GeneralContext";
-import axiosInstance from "../api/axiosInstance";
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Users.css";
 
-const Users = () => {
-  const { allUsers, setAllUsers } = useGeneralContext();
-  const [search, setSearch] = useState("");
-
-  const filteredUsers = useMemo(
-    () =>
-      allUsers.filter(
-        (u) =>
-          u.name.toLowerCase().includes(search.toLowerCase()) ||
-          u.email.toLowerCase().includes(search.toLowerCase())
-      ),
-    [allUsers, search]
-  );
-
-  const handleRemove = async (id) => {
-    try {
-      await axiosInstance.delete(`/admin/users/${id}`);
-    } catch (err) {
-      // backend unavailable, remove locally
-    }
-    setAllUsers((prev) => prev.filter((u) => u.id !== id));
-  };
+function Users() {
+  const users = [
+    {
+      id: 1,
+      initials: "AM",
+      name: "Alex Morgan",
+      email: "alex.morgan@example.com",
+      role: "Trader",
+      status: "Active",
+    },
+    {
+      id: 2,
+      initials: "SJ",
+      name: "Sarah Johnson",
+      email: "sarah.johnson@example.com",
+      role: "Trader",
+      status: "Active",
+    },
+    {
+      id: 3,
+      initials: "DK",
+      name: "Daniel Kim",
+      email: "daniel.kim@example.com",
+      role: "Analyst",
+      status: "Inactive",
+    },
+    {
+      id: 4,
+      initials: "RP",
+      name: "Riya Patel",
+      email: "riya.patel@example.com",
+      role: "Trader",
+      status: "Active",
+    },
+    {
+      id: 5,
+      initials: "MW",
+      name: "Marcus Williams",
+      email: "marcus.williams@example.com",
+      role: "Admin",
+      status: "Active",
+    },
+    {
+      id: 6,
+      initials: "EC",
+      name: "Emily Carter",
+      email: "emily.carter@example.com",
+      role: "Trader",
+      status: "Inactive",
+    },
+    {
+      id: 7,
+      initials: "JO",
+      name: "James Okafor",
+      email: "james.okafor@example.com",
+      role: "Analyst",
+      status: "Active",
+    },
+    {
+      id: 8,
+      initials: "LN",
+      name: "Lina Nguyen",
+      email: "lina.nguyen@example.com",
+      role: "Trader",
+      status: "Active",
+    },
+  ];
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div>
-          <h2 style={styles.title}>All Users</h2>
-          <p style={styles.subtitle}>Manage registered users on SB Stocks.</p>
-        </div>
-        <div style={styles.searchBox}>
-          <FiSearch size={16} color="#94a3b8" />
-          <input
-            type="text"
-            placeholder="Search users..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={styles.searchInput}
-          />
-        </div>
-      </div>
+    <main className="users-page">
+      <div style={{ marginBottom: "20px" }}>
+  <Link
+    to="/dashboard"
+    style={{
+      color: "#91aaff",
+      textDecoration: "none",
+      fontWeight: "bold",
+      fontSize: "16px",
+    }}
+  >
+    ← Back to Dashboard
+  </Link>
+</div>
+      <section className="users-container">
+        <header className="users-header">
+          <span className="users-eyebrow">Administration</span>
+          <h1>Users Management</h1>
+          <p>Review and manage user access across the Stock Trading App.</p>
+        </header>
 
-      <div style={styles.tableWrap}>
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.th}>User</th>
-              <th style={styles.th}>Email</th>
-              <th style={styles.th}>Role</th>
-              <th style={styles.th}>Balance</th>
-              <th style={styles.th}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.map((u) => (
-              <tr key={u.id} style={styles.tr}>
-                <td style={styles.td}>
-                  <div style={styles.userCell}>
-                    <div style={styles.avatar}>{u.name.charAt(0).toUpperCase()}</div>
-                    <span style={{ fontWeight: 600 }}>{u.name}</span>
-                  </div>
-                </td>
-                <td style={styles.td}>{u.email}</td>
-                <td style={styles.td}>
-                  <span
-                    style={{
-                      ...styles.badge,
-                      background: u.isAdmin ? "rgba(168,85,247,0.1)" : "rgba(59,130,246,0.1)",
-                      color: u.isAdmin ? "#9333ea" : "#2563eb",
-                    }}
-                  >
-                    {u.isAdmin ? <FiShield size={12} /> : <FiUser size={12} />}
-                    {u.isAdmin ? "Admin" : "User"}
-                  </span>
-                </td>
-                <td style={styles.td}>₹{Number(u.balance || 0).toLocaleString("en-IN")}</td>
-                <td style={styles.td}>
-                  <button style={styles.deleteBtn} onClick={() => handleRemove(u.id)}>
-                    <FiTrash2 size={14} /> Remove
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {filteredUsers.length === 0 && (
-              <tr>
-                <td colSpan={5} style={styles.emptyRow}>No users found.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+        <section className="users-controls">
+          <label className="users-search-field">
+            <span className="users-search-label">Search users</span>
+            <input
+              type="search"
+              placeholder="Search users..."
+              aria-label="Search users"
+            />
+          </label>
+        </section>
+
+        <section className="users-table-section">
+          <div className="users-table-wrapper">
+            <table className="users-table">
+              <thead>
+                <tr>
+                  <th>Avatar</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id}>
+                    <td data-label="Avatar">
+                      <span className="user-avatar" aria-label={`${user.name} avatar`}>
+                        {user.initials}
+                      </span>
+                    </td>
+                    <td data-label="Name">
+                      <strong className="user-name">{user.name}</strong>
+                    </td>
+                    <td data-label="Email">
+                      <span className="user-email">{user.email}</span>
+                    </td>
+                    <td data-label="Role">
+                      <span className="user-role">{user.role}</span>
+                    </td>
+                    <td data-label="Status">
+                      <span
+                        className={`user-status ${
+                          user.status === "Active"
+                            ? "user-status-active"
+                            : "user-status-inactive"
+                        }`}
+                      >
+                        {user.status}
+                      </span>
+                    </td>
+                    <td data-label="Actions">
+                      <div className="user-actions">
+                        <button type="button" className="user-action-button user-view-button">
+                          View
+                        </button>
+                        <button
+                          type="button"
+                          className="user-action-button user-delete-button"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
   );
-};
-
-const styles = {
-  page: { padding: "24px", maxWidth: "1100px", margin: "0 auto" },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    flexWrap: "wrap",
-    gap: "16px",
-    marginBottom: "20px",
-  },
-  title: { fontSize: "24px", fontWeight: 700, color: "#0f172a", margin: 0 },
-  subtitle: { color: "#64748b", fontSize: "14px", marginTop: "4px" },
-  searchBox: {
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    background: "#fff",
-    border: "1px solid #e2e8f0",
-    borderRadius: "10px",
-    padding: "8px 14px",
-    minWidth: "220px",
-  },
-  searchInput: { border: "none", outline: "none", flex: 1, fontSize: "14px" },
-  tableWrap: {
-    background: "#fff",
-    borderRadius: "14px",
-    overflow: "auto",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.05)",
-  },
-  table: { width: "100%", borderCollapse: "collapse", minWidth: "620px" },
-  th: {
-    textAlign: "left",
-    padding: "14px 16px",
-    fontSize: "12px",
-    textTransform: "uppercase",
-    color: "#64748b",
-    borderBottom: "1px solid #e2e8f0",
-  },
-  tr: { borderBottom: "1px solid #f1f5f9" },
-  td: { padding: "14px 16px", fontSize: "14px", color: "#0f172a" },
-  userCell: { display: "flex", alignItems: "center", gap: "10px" },
-  avatar: {
-    width: "32px",
-    height: "32px",
-    borderRadius: "50%",
-    background: "#0f172a",
-    color: "#fff",
-    fontSize: "13px",
-    fontWeight: 700,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  badge: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "4px",
-    padding: "4px 10px",
-    borderRadius: "20px",
-    fontSize: "12px",
-    fontWeight: 700,
-  },
-  deleteBtn: {
-    display: "flex",
-    alignItems: "center",
-    gap: "6px",
-    background: "rgba(239,68,68,0.1)",
-    color: "#dc2626",
-    border: "none",
-    padding: "6px 12px",
-    borderRadius: "8px",
-    fontSize: "12.5px",
-    fontWeight: 600,
-    cursor: "pointer",
-  },
-  emptyRow: { textAlign: "center", padding: "24px", color: "#94a3b8" },
-};
+}
 
 export default Users;

@@ -1,45 +1,34 @@
+
+import "./App.css";
 import { Routes, Route } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
-
 import Landing from "./pages/Landing";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./pages/Home";
-import Portfolio from "./pages/Portfolio";
-import History from "./pages/History";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-import StockChart from "./pages/StockChart";
-import Admin from "./pages/Admin";
-import AdminStockChart from "./pages/AdminStockChart";
+import History from "./pages/History";
 import Users from "./pages/Users";
 import AllOrders from "./pages/AllOrders";
 import AllTransactions from "./pages/AllTransactions";
+import Admin from "./pages/Admin";
+import AdminStockChart from "./pages/AdminStockChart";
 
 function App() {
   return (
-    <>
-      <Navbar />
-
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-
-        <Route path="/home" element={<Home />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/profile" element={<Profile />} />
-
-        <Route path="/stock/:symbol" element={<StockChart />} />
-
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/chart" element={<AdminStockChart />} />
-        <Route path="/admin/users" element={<Users />} />
-        <Route path="/admin/orders" element={<AllOrders />} />
-        <Route path="/admin/transactions" element={<AllTransactions />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/Login" element={<Login />} />
+      <Route path="/Register" element={<Register />} />
+      <Route path="/Dashboard" element={<Dashboard />} />
+      <Route path="/Profile" element={<Profile />} />
+      <Route path="/History" element={<History />} />
+      <Route path="/Users" element={<Users />} />
+      <Route path="/AllOrders" element={<AllOrders />} />
+      <Route path="/AllTransactions" element={<AllTransactions />} />
+      <Route path="/Admin" element={<Admin />} />
+      <Route path="/AdminStockChart" element={<AdminStockChart />} />
+    </Routes>
   );
 }
 

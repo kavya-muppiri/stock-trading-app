@@ -1,159 +1,217 @@
-import React, { useState, useMemo } from "react";
-import { FiArrowUp, FiArrowDown, FiClock } from "react-icons/fi";
-import { useGeneralContext } from "../context/GeneralContext";
 
-const History = () => {
-  const { transactions } = useGeneralContext();
-  const [filter, setFilter] = useState("ALL");
+import React from "react";
+import { Link } from "react-router-dom";
+import "./History.css";
 
-  const filtered = useMemo(() => {
-    if (filter === "ALL") return transactions;
-    return transactions.filter((t) => t.type === filter);
-  }, [transactions, filter]);
-
-  const sorted = useMemo(
-    () => [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date)),
-    [filtered]
-  );
-
-  const formatDate = (iso) =>
-    new Date(iso).toLocaleString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+function History() {
+  const transactions = [
+    {
+      id: 1,
+      date: "Jul 12, 2026",
+      stock: "Apple Inc.",
+      symbol: "AAPL",
+      type: "Buy",
+      quantity: 12,
+      price: "$214.35",
+      total: "$2,572.20",
+      status: "Completed",
+    },
+    {
+      id: 2,
+      date: "Jul 11, 2026",
+      stock: "Tesla Inc.",
+      symbol: "TSLA",
+      type: "Sell",
+      quantity: 8,
+      price: "$328.40",
+      total: "$2,627.20",
+      status: "Completed",
+    },
+    {
+      id: 3,
+      date: "Jul 10, 2026",
+      stock: "NVIDIA Corp.",
+      symbol: "NVDA",
+      type: "Buy",
+      quantity: 15,
+      price: "$164.80",
+      total: "$2,472.00",
+      status: "Completed",
+    },
+    {
+      id: 4,
+      date: "Jul 9, 2026",
+      stock: "Microsoft Corp.",
+      symbol: "MSFT",
+      type: "Buy",
+      quantity: 10,
+      price: "$498.20",
+      total: "$4,982.00",
+      status: "Pending",
+    },
+    {
+      id: 5,
+      date: "Jul 8, 2026",
+      stock: "Amazon.com Inc.",
+      symbol: "AMZN",
+      type: "Sell",
+      quantity: 6,
+      price: "$224.60",
+      total: "$1,347.60",
+      status: "Completed",
+    },
+    {
+      id: 6,
+      date: "Jul 7, 2026",
+      stock: "Alphabet Inc.",
+      symbol: "GOOGL",
+      type: "Buy",
+      quantity: 18,
+      price: "$186.15",
+      total: "$3,350.70",
+      status: "Completed",
+    },
+    {
+      id: 7,
+      date: "Jul 6, 2026",
+      stock: "Meta Platforms",
+      symbol: "META",
+      type: "Sell",
+      quantity: 7,
+      price: "$715.30",
+      total: "$5,007.10",
+      status: "Pending",
+    },
+    {
+      id: 8,
+      date: "Jul 5, 2026",
+      stock: "Netflix Inc.",
+      symbol: "NFLX",
+      type: "Buy",
+      quantity: 5,
+      price: "$1,192.50",
+      total: "$5,962.50",
+      status: "Completed",
+    },
+  ];
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div>
-          <h2 style={styles.title}>Transaction History</h2>
-          <p style={styles.subtitle}>All your past buy and sell orders.</p>
-        </div>
-        <div style={styles.filterGroup}>
-          {["ALL", "BUY", "SELL"].map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              style={{
-                ...styles.filterBtn,
-                ...(filter === f ? styles.filterBtnActive : {}),
-              }}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-      </div>
+    <main className="history-page">
+      <div style={{ marginBottom: "20px" }}>
+  <Link
+    to="/dashboard"
+    style={{
+      color: "#91aaff",
+      textDecoration: "none",
+      fontWeight: "bold",
+      fontSize: "16px",
+    }}
+  >
+    ← Back to Dashboard
+  </Link>
+</div>
+      <section className="history-container">
+        <header className="history-header">
+          <span className="history-eyebrow">Portfolio Activity</span>
+          <h1>Transaction History</h1>
+          <p>Review every paper trade and monitor your recent portfolio activity.</p>
+        </header>
 
-      <div style={styles.tableWrap}>
-        {sorted.length === 0 ? (
-          <div style={styles.emptyState}>
-            <FiClock size={32} color="#94a3b8" />
-            <p>No transactions found.</p>
-          </div>
-        ) : (
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th style={styles.th}>Date</th>
-                <th style={styles.th}>Stock</th>
-                <th style={styles.th}>Type</th>
-                <th style={styles.th}>Qty</th>
-                <th style={styles.th}>Price</th>
-                <th style={styles.th}>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sorted.map((t) => (
-                <tr key={t.id} style={styles.tr}>
-                  <td style={styles.td}>{formatDate(t.date)}</td>
-                  <td style={{ ...styles.td, fontWeight: 700 }}>{t.symbol}</td>
-                  <td style={styles.td}>
-                    <span
-                      style={{
-                        ...styles.badge,
-                        background: t.type === "BUY" ? "rgba(34,197,94,0.1)" : "rgba(239,68,68,0.1)",
-                        color: t.type === "BUY" ? "#16a34a" : "#dc2626",
-                      }}
-                    >
-                      {t.type === "BUY" ? <FiArrowUp size={12} /> : <FiArrowDown size={12} />}
-                      {t.type}
-                    </span>
-                  </td>
-                  <td style={styles.td}>{t.qty}</td>
-                  <td style={styles.td}>₹{t.price.toLocaleString("en-IN")}</td>
-                  <td style={styles.td}>₹{(t.qty * t.price).toLocaleString("en-IN")}</td>
+        <section className="history-controls">
+          <label className="search-field">
+            <span className="search-label">Search transactions</span>
+            <input
+              type="search"
+              placeholder="Search by stock name..."
+              aria-label="Search by stock name"
+            />
+          </label>
+
+          <label className="filter-field">
+            <span className="filter-label">Transaction type</span>
+            <select aria-label="Filter transactions by type" defaultValue="All">
+              <option value="All">All</option>
+              <option value="Buy">Buy</option>
+              <option value="Sell">Sell</option>
+            </select>
+          </label>
+        </section>
+
+        <section className="transaction-section">
+          <div className="transaction-table-wrapper">
+            <table className="transaction-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Stock</th>
+                  <th>Type</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-    </div>
-  );
-};
+              </thead>
+              <tbody>
+                {transactions.map((transaction) => (
+                  <tr key={transaction.id}>
+                    <td data-label="Date">{transaction.date}</td>
+                    <td data-label="Stock">
+                      <div className="stock-details">
+                        <strong>{transaction.stock}</strong>
+                        <span>{transaction.symbol}</span>
+                      </div>
+                    </td>
+                    <td data-label="Type">
+                      <span
+                        className={`transaction-type ${
+                          transaction.type === "Buy"
+                            ? "transaction-type-buy"
+                            : "transaction-type-sell"
+                        }`}
+                      >
+                        {transaction.type}
+                      </span>
+                    </td>
+                    <td data-label="Quantity">{transaction.quantity}</td>
+                    <td data-label="Price">{transaction.price}</td>
+                    <td data-label="Total" className="transaction-total">
+                      {transaction.total}
+                    </td>
+                    <td data-label="Status">
+                      <span
+                        className={`transaction-status ${
+                          transaction.status === "Completed"
+                            ? "transaction-status-completed"
+                            : "transaction-status-pending"
+                        }`}
+                      >
+                        {transaction.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-const styles = {
-  page: { padding: "24px", maxWidth: "1100px", margin: "0 auto" },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    flexWrap: "wrap",
-    gap: "16px",
-    marginBottom: "20px",
-  },
-  title: { fontSize: "24px", fontWeight: 700, color: "#0f172a", margin: 0 },
-  subtitle: { color: "#64748b", fontSize: "14px", marginTop: "4px" },
-  filterGroup: { display: "flex", gap: "8px", background: "#e2e8f0", borderRadius: "10px", padding: "4px" },
-  filterBtn: {
-    border: "none",
-    background: "transparent",
-    padding: "8px 16px",
-    borderRadius: "8px",
-    fontSize: "13px",
-    fontWeight: 600,
-    color: "#475569",
-    cursor: "pointer",
-  },
-  filterBtnActive: { background: "#fff", color: "#0f172a", boxShadow: "0 1px 4px rgba(0,0,0,0.1)" },
-  tableWrap: {
-    background: "#fff",
-    borderRadius: "14px",
-    overflow: "auto",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.05)",
-  },
-  table: { width: "100%", borderCollapse: "collapse", minWidth: "640px" },
-  th: {
-    textAlign: "left",
-    padding: "14px 16px",
-    fontSize: "12px",
-    textTransform: "uppercase",
-    color: "#64748b",
-    borderBottom: "1px solid #e2e8f0",
-  },
-  tr: { borderBottom: "1px solid #f1f5f9" },
-  td: { padding: "14px 16px", fontSize: "14px", color: "#0f172a" },
-  badge: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "4px",
-    padding: "4px 10px",
-    borderRadius: "20px",
-    fontSize: "12px",
-    fontWeight: 700,
-  },
-  emptyState: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "10px",
-    padding: "48px 24px",
-    color: "#64748b",
-  },
-};
+          <nav className="pagination" aria-label="Transaction history pages">
+            <button type="button" className="pagination-button">
+              Previous
+            </button>
+            <button type="button" className="pagination-button pagination-active">
+              1
+            </button>
+            <button type="button" className="pagination-button">
+              2
+            </button>
+            <button type="button" className="pagination-button">
+              Next
+            </button>
+          </nav>
+        </section>
+      </section>
+    </main>
+  );
+}
 
 export default History;

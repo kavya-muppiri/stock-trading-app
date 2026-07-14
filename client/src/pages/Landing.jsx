@@ -1,134 +1,175 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FiTrendingUp, FiShield, FiBarChart2, FiZap } from "react-icons/fi";
+import "./Landing.css";
 
-const features = [
-  {
-    icon: <FiTrendingUp size={26} color="#22c55e" />,
-    title: "Real-Time Style Trading",
-    desc: "Practice buying and selling stocks with live-style price simulations, risk free.",
-  },
-  {
-    icon: <FiShield size={26} color="#22c55e" />,
-    title: "Zero Risk, Real Learning",
-    desc: "Trade with virtual currency and learn the market without losing real money.",
-  },
-  {
-    icon: <FiBarChart2 size={26} color="#22c55e" />,
-    title: "Portfolio Analytics",
-    desc: "Track your holdings, profit & loss, and transaction history in one dashboard.",
-  },
-  {
-    icon: <FiZap size={26} color="#22c55e" />,
-    title: "Instant Execution",
-    desc: "Orders are placed and reflected instantly in your paper trading portfolio.",
-  },
-];
+function Landing() {
+  const features = [
+    {
+      title: "Paper Trading",
+      description:
+        "Practice trading with virtual funds and build confidence before entering real markets.",
+      icon: "📈",
+    },
+    {
+      title: "Portfolio Management",
+      description:
+        "Track holdings, monitor performance, and understand your investment allocation in one place.",
+      icon: "💼",
+    },
+    {
+      title: "Market Insights",
+      description:
+        "Explore clear market trends, stock movements, and data-driven insights for smarter decisions.",
+      icon: "📊",
+    },
+    {
+      title: "Secure Authentication",
+      description:
+        "Your account is protected with secure authentication designed for a dependable trading experience.",
+      icon: "🔒",
+    },
+  ];
 
-const Landing = () => {
+  const benefits = [
+    {
+      title: "Learn Without Risk",
+      description:
+        "Test strategies and understand market behavior without putting your real money at risk.",
+    },
+    {
+      title: "Make Informed Decisions",
+      description:
+        "Keep your portfolio organized and use market insights to strengthen every trading decision.",
+    },
+    {
+      title: "Built for Every Trader",
+      description:
+        "Whether you are starting out or refining a strategy, our platform keeps trading simple.",
+    },
+  ];
+
   return (
-    <div style={styles.page}>
-      <style>{`
-        @media (max-width: 768px) {
-          .sb-landing-grid { grid-template-columns: 1fr !important; }
-          .sb-hero-title { font-size: 32px !important; }
-        }
-      `}</style>
+    <main className="landing-page">
+      <section className="hero-section">
+        <div className="hero-content">
+          <span className="hero-badge">Smart investing starts here</span>
 
-      <section style={styles.hero}>
-        <h1 className="sb-hero-title" style={styles.heroTitle}>
-          Master the Market with <span style={{ color: "#22c55e" }}>SB Stocks</span>
-        </h1>
-        <p style={styles.heroSubtitle}>
-          A risk-free paper trading platform to learn stock market investing with
-          virtual money and real market dynamics.
-        </p>
-        <div style={styles.heroButtons}>
-          <Link to="/register" style={styles.primaryBtn}>Get Started</Link>
-          <Link to="/login" style={styles.secondaryBtn}>Login</Link>
+          <h1 className="hero-title">
+            Trade Smarter with <span>Stock Trading App</span>
+          </h1>
+
+          <p className="hero-tagline">
+            A modern platform for learning, tracking, and growing your trading
+            confidence.
+          </p>
+
+          <p className="hero-description">
+            Practice with paper trading, manage your portfolio, and discover
+            meaningful market insights in one secure, easy-to-use experience.
+          </p>
+
+          <div className="hero-actions">
+            <Link to="/login" className="button button-primary">
+              Get Started
+            </Link>
+
+            <Link to="/register" className="button button-secondary">
+              Learn More
+            </Link>
+          </div>
+        </div>
+
+        <div className="hero-visual" aria-hidden="true">
+          <div className="market-card">
+            <div className="market-card-header">
+              <span className="market-label">Portfolio Value</span>
+              <span className="market-status">Live Demo</span>
+            </div>
+
+            <h2>$24,680.50</h2>
+
+            <p className="market-growth">+12.48% this month</p>
+
+            <div className="chart-bars">
+              <span className="bar bar-one" />
+              <span className="bar bar-two" />
+              <span className="bar bar-three" />
+              <span className="bar bar-four" />
+              <span className="bar bar-five" />
+              <span className="bar bar-six" />
+              <span className="bar bar-seven" />
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="sb-landing-grid" style={styles.grid}>
-        {features.map((f, idx) => (
-          <div key={idx} style={styles.card}>
-            <div style={styles.iconWrap}>{f.icon}</div>
-            <h3 style={styles.cardTitle}>{f.title}</h3>
-            <p style={styles.cardDesc}>{f.desc}</p>
-          </div>
-        ))}
+      <section className="features-section">
+        <div className="section-heading">
+          <span className="section-label">Platform Features</span>
+
+          <h2>Everything you need to trade with confidence</h2>
+
+          <p>
+            Explore practical tools designed to make your learning and trading
+            journey more focused.
+          </p>
+        </div>
+
+        <div className="features-grid">
+          {features.map((feature) => (
+            <article className="feature-card" key={feature.title}>
+              <div className="feature-icon">{feature.icon}</div>
+
+              <h3>{feature.title}</h3>
+
+              <p>{feature.description}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
-      <footer style={styles.footer}>
-        <p>© 2026 SB Stocks. Built for learning purposes only.</p>
-      </footer>
-    </div>
-  );
-};
+      <section className="why-section">
+        <div className="section-heading">
+          <span className="section-label">Why Choose Us</span>
 
-const styles = {
-  page: { background: "#f8fafc", minHeight: "calc(100vh - 64px)" },
-  hero: {
-    textAlign: "center",
-    padding: "80px 24px 60px",
-    background: "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)",
-    color: "#fff",
-  },
-  heroTitle: { fontSize: "42px", fontWeight: 800, margin: "0 auto 16px", maxWidth: "700px" },
-  heroSubtitle: { fontSize: "16px", color: "#cbd5e1", maxWidth: "560px", margin: "0 auto 32px" },
-  heroButtons: { display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" },
-  primaryBtn: {
-    background: "#22c55e",
-    color: "#0f172a",
-    padding: "12px 28px",
-    borderRadius: "10px",
-    textDecoration: "none",
-    fontWeight: 700,
-    fontSize: "15px",
-  },
-  secondaryBtn: {
-    background: "transparent",
-    color: "#fff",
-    padding: "12px 28px",
-    borderRadius: "10px",
-    textDecoration: "none",
-    fontWeight: 600,
-    fontSize: "15px",
-    border: "1px solid rgba(255,255,255,0.3)",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "20px",
-    padding: "48px 24px",
-    maxWidth: "1200px",
-    margin: "0 auto",
-  },
-  card: {
-    background: "#fff",
-    borderRadius: "14px",
-    padding: "24px",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.05)",
-  },
-  iconWrap: {
-    width: "48px",
-    height: "48px",
-    borderRadius: "12px",
-    background: "rgba(34,197,94,0.1)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: "14px",
-  },
-  cardTitle: { fontSize: "16px", fontWeight: 700, color: "#0f172a", margin: "0 0 8px" },
-  cardDesc: { fontSize: "13.5px", color: "#64748b", lineHeight: 1.5, margin: 0 },
-  footer: {
-    textAlign: "center",
-    padding: "24px",
-    color: "#94a3b8",
-    fontSize: "13px",
-    borderTop: "1px solid #e2e8f0",
-  },
-};
+          <h2>A better way to build trading confidence</h2>
+        </div>
+
+        <div className="benefits-grid">
+          {benefits.map((benefit, index) => (
+            <article className="benefit-card" key={benefit.title}>
+              <span className="benefit-number">0{index + 1}</span>
+
+              <h3>{benefit.title}</h3>
+
+              <p>{benefit.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="cta-section">
+        <div className="cta-content">
+          <span className="section-label">Start Today</span>
+
+          <h2>Ready to practice your next winning strategy?</h2>
+
+          <p>
+            Start paper trading today and gain the confidence to make better
+            market decisions tomorrow.
+          </p>
+
+          <Link to="/login" className="button button-primary">
+            Start Paper Trading
+          </Link>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <p>© 2026 Stock Trading App</p>
+      </footer>
+    </main>
+  );
+}
 
 export default Landing;
