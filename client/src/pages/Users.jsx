@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Users.css";
 
 function Users() {
@@ -71,6 +72,19 @@ function Users() {
 
   return (
     <main className="users-page">
+      <div style={{ marginBottom: "20px" }}>
+  <Link
+    to="/dashboard"
+    style={{
+      color: "#91aaff",
+      textDecoration: "none",
+      fontWeight: "bold",
+      fontSize: "16px",
+    }}
+  >
+    ← Back to Dashboard
+  </Link>
+</div>
       <section className="users-container">
         <header className="users-header">
           <span className="users-eyebrow">Administration</span>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./AllTransactions.css";
 
 function AllTransactions() {
@@ -117,6 +118,19 @@ function AllTransactions() {
 
   return (
     <main className="all-transactions-page">
+      <div style={{ marginBottom: "20px" }}>
+  <Link
+    to="/dashboard"
+    style={{
+      color: "#91aaff",
+      textDecoration: "none",
+      fontWeight: "bold",
+      fontSize: "16px",
+    }}
+  >
+    ← Back to Dashboard
+  </Link>
+</div>
       <section className="all-transactions-container">
         <header className="all-transactions-header">
           <span className="all-transactions-eyebrow">Administration</span>

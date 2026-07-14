@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Landing.css";
 
 function Landing() {
@@ -52,25 +53,29 @@ function Landing() {
       <section className="hero-section">
         <div className="hero-content">
           <span className="hero-badge">Smart investing starts here</span>
+
           <h1 className="hero-title">
             Trade Smarter with <span>Stock Trading App</span>
           </h1>
+
           <p className="hero-tagline">
             A modern platform for learning, tracking, and growing your trading
             confidence.
           </p>
+
           <p className="hero-description">
             Practice with paper trading, manage your portfolio, and discover
             meaningful market insights in one secure, easy-to-use experience.
           </p>
 
           <div className="hero-actions">
-            <button type="button" className="button button-primary">
+            <Link to="/login" className="button button-primary">
               Get Started
-            </button>
-            <button type="button" className="button button-secondary">
+            </Link>
+
+            <Link to="/register" className="button button-secondary">
               Learn More
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -80,8 +85,11 @@ function Landing() {
               <span className="market-label">Portfolio Value</span>
               <span className="market-status">Live Demo</span>
             </div>
+
             <h2>$24,680.50</h2>
+
             <p className="market-growth">+12.48% this month</p>
+
             <div className="chart-bars">
               <span className="bar bar-one" />
               <span className="bar bar-two" />
@@ -98,7 +106,9 @@ function Landing() {
       <section className="features-section">
         <div className="section-heading">
           <span className="section-label">Platform Features</span>
+
           <h2>Everything you need to trade with confidence</h2>
+
           <p>
             Explore practical tools designed to make your learning and trading
             journey more focused.
@@ -109,7 +119,9 @@ function Landing() {
           {features.map((feature) => (
             <article className="feature-card" key={feature.title}>
               <div className="feature-icon">{feature.icon}</div>
+
               <h3>{feature.title}</h3>
+
               <p>{feature.description}</p>
             </article>
           ))}
@@ -119,6 +131,7 @@ function Landing() {
       <section className="why-section">
         <div className="section-heading">
           <span className="section-label">Why Choose Us</span>
+
           <h2>A better way to build trading confidence</h2>
         </div>
 
@@ -126,7 +139,9 @@ function Landing() {
           {benefits.map((benefit, index) => (
             <article className="benefit-card" key={benefit.title}>
               <span className="benefit-number">0{index + 1}</span>
+
               <h3>{benefit.title}</h3>
+
               <p>{benefit.description}</p>
             </article>
           ))}
@@ -136,14 +151,17 @@ function Landing() {
       <section className="cta-section">
         <div className="cta-content">
           <span className="section-label">Start Today</span>
+
           <h2>Ready to practice your next winning strategy?</h2>
+
           <p>
             Start paper trading today and gain the confidence to make better
             market decisions tomorrow.
           </p>
-          <button type="button" className="button button-primary">
+
+          <Link to="/login" className="button button-primary">
             Start Paper Trading
-          </button>
+          </Link>
         </div>
       </section>
 

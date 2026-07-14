@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Admin.css";
 function Admin() {
   const statistics = [
@@ -59,6 +60,19 @@ function Admin() {
 
   return (
     <main className="admin-page">
+      <div style={{ marginBottom: "20px" }}>
+  <Link
+    to="/Dashboard"
+    style={{
+      color: "#91aaff",
+      textDecoration: "none",
+      fontWeight: "bold",
+      fontSize: "16px",
+    }}
+  >
+    ← Back to Dashboard
+  </Link>
+</div>
       <section className="admin-container">
         <header className="admin-header">
           <span className="admin-eyebrow">Administration</span>

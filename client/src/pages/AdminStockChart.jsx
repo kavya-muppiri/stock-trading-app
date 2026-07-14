@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./AdminStockChart.css";
 
 function AdminStockChart() {
@@ -46,6 +47,19 @@ function AdminStockChart() {
 
   return (
     <main className="admin-stock-chart-page">
+      <div style={{ marginBottom: "20px" }}>
+  <Link
+    to="/Dashboard"
+    style={{
+      color: "#91aaff",
+      textDecoration: "none",
+      fontWeight: "bold",
+      fontSize: "16px",
+    }}
+  >
+    ← Back to Dashboard
+  </Link>
+</div>
       <section className="admin-stock-chart-container">
         <header className="admin-stock-chart-header">
           <span className="admin-stock-chart-eyebrow">Market Intelligence</span>

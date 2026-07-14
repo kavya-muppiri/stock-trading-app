@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./AllOrders.css";
 
 function AllOrders() {
@@ -107,6 +108,19 @@ function AllOrders() {
 
   return (
     <main className="all-orders-page">
+      <div style={{ marginBottom: "20px" }}>
+  <Link
+    to="/dashboard"
+    style={{
+      color: "#91aaff",
+      textDecoration: "none",
+      fontWeight: "bold",
+      fontSize: "16px",
+    }}
+  >
+    ← Back to Dashboard
+  </Link>
+</div>
       <section className="all-orders-container">
         <header className="all-orders-header">
           <span className="all-orders-eyebrow">Administration</span>
