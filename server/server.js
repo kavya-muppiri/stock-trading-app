@@ -7,7 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import portfolioRoutes from "./routes/portfolioRoutes.js";
 import transactionRoutes from "./routes/transactRoutes.js";
 import tradeRoutes from "./routes/tradeRoutes.js";
-
+import errorHandler from "./middleware/errorMiddleware.js";
 dotenv.config();
 
 connectDB();
@@ -36,7 +36,7 @@ app.use("/api/stocks", stockRoutes);
 app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/trade", tradeRoutes);
-
+app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
