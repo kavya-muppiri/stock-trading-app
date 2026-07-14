@@ -1,4 +1,4 @@
-# SB Stocks – Frontend Structure Documentation
+# Stock Trading App – Frontend Structure Documentation
 
 **Project:** SB Stocks – Paper Trading Platform
 **Document Type:** Frontend Architecture Specification

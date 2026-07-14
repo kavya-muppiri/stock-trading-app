@@ -2,73 +2,71 @@
 
 ## Roles & Responsibilities
 
-### 1.Introduction
+### 1. Introduction
 
-Software development requires effective teamwork, clear communication, and proper distribution of responsibilities. Assigning defined roles helps each team member focus on their area of expertise. This improves development speed, code quality, documentation, and project organization. For the Stock Trading App, the team is divided into frontend, backend, database setup, design, documentation, and submission responsibilities.
+Software development requires effective teamwork, clear communication, and proper distribution of responsibilities. Assigning defined roles helps each team member focus on their area of expertise, improving development speed, code quality, documentation, and project organization. For the Stock Trading App, responsibilities were distributed across frontend development, backend development, documentation, testing, and project management to ensure successful project completion.
 
-### 2.Team Members and Responsibilities
+### 2. Team Members and Responsibilities
 
 ### Kavya
 
 **Role:** Team Lead & Frontend Developer
 
 **Responsibilities:**
+- Planned the overall project architecture and frontend workflow.
+- Managed the GitHub repository, branches, and project coordination.
+- Set up the React + Vite frontend environment.
+- Configured frontend routing and application integration.
+- Coordinated frontend development among team members.
+- Assisted in developing and integrating frontend pages.
+- Managed project integration, testing, and final submission.
+- Reviewed team contributions and ensured smooth collaboration.
 
-- Coordinate team tasks and monitor overall project progress.
-- Plan the technical architecture and application workflow.
-- Develop the frontend interface using React.
-- Maintain consistency in UI design, layouts, and user experience.
-- Manage the GitHub repository and maintain project branches.
-- Support integration between frontend and backend modules.
+### Charvi
 
-### Malvika
+**Role:** Frontend Developer & Documentation Lead
+
+**Responsibilities:**
+- Prepared project documentation including ER Diagram, Features, MVC Pattern, Project Folder Structure, User Flow, and Roles & Responsibilities.
+- Designed and developed the Landing Page.
+- Developed Login, Register, and Dashboard pages.
+- Integrated React Router for application navigation.
+- Connected all frontend pages and implemented navigation flow.
+- Added Dashboard navigation and Back to Dashboard functionality.
+- Integrated frontend modules and performed frontend testing.
+- Managed frontend version control using Git and GitHub.
+
+### Malavika
 
 **Role:** Backend Developer
 
 **Responsibilities:**
-
-- Organize and maintain the backend folder structure.
-- Develop APIs required for authentication, stocks, portfolio, and transactions.
-- Configure and manage the Express.js server.
-- Set up MongoDB configuration for data storage.
-- Implement backend business logic and validations.
-- Test backend APIs and resolve server-side issues.
+- Developed the backend architecture and project structure.
+- Configured Express server and MongoDB Atlas.
+- Created database models for Users, Stocks, Portfolio, and Transactions.
+- Implemented authentication, portfolio, stock, transaction, and trade APIs.
+- Configured backend routes, middleware, and server integration.
+- Developed Buy and Sell Stock functionalities.
+- Managed backend setup and project integration.
 
 ### Muktheswari
 
-**Role:** Database & Project Setup
+**Role:** Backend Configuration, Testing & Validation
 
 **Responsibilities:**
+- Configured backend environment variables and MongoDB connection.
+- Added JWT authentication and centralized Express error handling.
+- Created and executed the stock database seeder.
+- Seeded MongoDB with sample stock data.
+- Performed backend testing using Postman.
+- Verified Register, Login, Stocks, Buy, Sell, and Portfolio APIs.
+- Validated backend functionality and resolved configuration issues.
+- Assisted in backend debugging and Git integration.
 
-- Set up the initial project structure and required dependencies.
-- Configure the React client-side application.
-- Configure the Node.js and Express server-side application.
-- Establish the database connection with MongoDB.
-- Create database schemas for users, stocks, portfolios, and transactions.
-- Implement the MVC architecture for better code organization.
+### 3. Team Collaboration
 
-### Charvi
+The Stock Trading App was developed collaboratively using the MERN Stack following an Agile development approach. Responsibilities were distributed among team members based on their expertise in frontend development, backend development, documentation, testing, and project management. GitHub branches were used for version control, enabling parallel development, efficient collaboration, and seamless integration of all project modules into the final application.
 
-**Role:** Design, Documentation & Submission
+### 4. Summary
 
-**Responsibilities:**
-
-- Prepare the ER Diagram documentation for the database design.
-- Create features documentation for the Stock Trading App.
-- Prepare the Roles and Responsibilities document.
-- Document project execution and setup steps.
-- Capture and organize output screenshots of the application.
-- Review the README file for clarity and completeness.
-- Prepare final project submission documents.
-
-### 3.Collaboration Workflow
-
-The team collaborates through GitHub by working on separate branches for different features and modules. Each member makes meaningful commits with clear messages to track changes effectively. Pull Requests are used to review, discuss, and merge completed work into the main branch. Regular communication through team meetings or messaging platforms helps resolve issues, share progress, and ensure all components integrate properly.
-
-### 4.Benefits of Role Distribution
-
-Role distribution allows team members to focus on specific tasks according to their strengths and responsibilities. It reduces confusion, avoids duplication of work, and improves accountability. Clear ownership of frontend, backend, database, documentation, and submission activities ensures better project quality. It also promotes collaboration and helps the team complete the project efficiently within the planned timeline.
-
-### 5.Conclusion
-
-The Stock Trading App is developed through coordinated efforts from all four team members. Each member contributes to an important part of the project, including development, setup, database management, documentation, and submission. Defined roles ensure smoother collaboration and help deliver a well-organized college project.
+The successful completion of the Stock Trading App was achieved through effective teamwork, proper task allocation, and continuous collaboration among all team members. Each contributor played a significant role in designing, developing, testing, documenting, and integrating different components of the application, resulting in a well-structured and fully functional project.

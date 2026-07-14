@@ -1,140 +1,124 @@
-# MVC Pattern
+# Stock Trading App
 
-## What is MVC?
+## MVC Pattern
 
-MVC stands for Model-View-Controller. It is a software architecture pattern that separates an application into three parts:
+### 1. Introduction
 
-- Model
-- View
-- Controller
+The Stock Trading App follows the **Model-View-Controller (MVC)** architectural pattern to separate the application's data, business logic, and user interface. This structure improves maintainability, scalability, and collaboration by allowing frontend and backend components to be developed independently.
 
-This separation makes the project easier to develop, test, and maintain.
+## 2. MVC Architecture Overview
 
----
+The application is divided into three main components:
 
-## Model
+- **Model** – Manages the application's data and database.
+- **View** – Represents the user interface displayed to users.
+- **Controller** – Handles business logic, processes requests, and communicates between the Model and the View.
 
-The Model is responsible for handling data and interacting with the database.
+## 3. Model
 
-In our project:
+The **Model** represents the application's data layer and manages interactions with the MongoDB database.
 
-```
-server/models/
-```
+### Database Models
 
-Example:
+- User Model
+- Stock Model
+- Portfolio Model
+- Transaction Model
 
-```
-User.js
-```
+### Responsibilities
 
-The User model defines the schema for storing user information in MongoDB.
+- Store user information
+- Manage stock details
+- Maintain portfolio records
+- Store transaction history
+- Interact with MongoDB using Mongoose
 
----
 
-## View
+## 4. View
 
-The View is the user interface.
+The **View** represents the frontend developed using **React.js**. It provides an interactive and responsive interface for users.
 
-In our project, the View is the React frontend located inside:
+### Frontend Pages
 
-```
-client/
-```
-
-It includes pages like:
-
-- Login
-- Register
+- Landing Page
+- Login Page
+- Register Page
 - Dashboard
-- Portfolio
-- Transactions
 - Profile
+- History
+- Users
+- All Orders
+- All Transactions
+- Admin Dashboard
+- Stock Analytics
 
----
+### Responsibilities
 
-## Controller
+- Display user information
+- Handle user interactions
+- Navigate between pages using React Router
+- Display portfolio, orders, transactions, and analytics
+- Provide responsive and user-friendly interfaces
 
-The Controller contains the business logic.
+## 5. Controller
 
-It receives requests from the client, processes them, interacts with the Model, and sends responses.
+The **Controller** manages application logic and processes requests received from the frontend.
 
-Controllers are located in:
+### Controllers
 
-```
-server/controllers/
-```
+- Authentication Controller
+- Stock Controller
+- Portfolio Controller
+- Transaction Controller
+- Trade Controller
 
----
+### Responsibilities
 
-## Routes
+- Process authentication requests
+- Handle stock operations
+- Manage portfolio data
+- Execute buy and sell transactions
+- Validate user requests
+- Return API responses to the frontend
 
-Routes connect API endpoints to controllers.
+## 6. MVC Workflow
 
-Routes are located in:
-
-```
-server/routes/
-```
-
-Example:
-
-```
-POST /api/auth/login
-        ↓
-authController.login()
-```
-
----
-
-## Project Structure
-
-```
-stock-trading-app
-│
-├── client
-│   └── React Frontend
-│
-├── server
-│   ├── config
-│   ├── controllers
-│   ├── middleware
-│   ├── models
-│   ├── routes
-│   └── utils
-│
-└── docs
-```
-
----
-
-## MVC Workflow
-
-```
-User
-   │
-   ▼
-React UI (View)
-   │
-   ▼
-Express Route
-   │
-   ▼
-Controller
-   │
-   ▼
-Model
-   │
-   ▼
-MongoDB
-   │
-   ▼
-Response
-   │
-   ▼
-React UI
+```text
+                User
+                  │
+                  ▼
+          React Frontend (View)
+                  │
+          HTTP Requests (REST API)
+                  │
+                  ▼
+        Express Controllers (Controller)
+                  │
+                  ▼
+      MongoDB Models (Model)
+                  │
+                  ▼
+             MongoDB Database
+                  │
+                  ▼
+      Response to Controller
+                  │
+                  ▼
+         React Frontend (View)
+                  │
+                  ▼
+             Display Result
 ```
 
-## Conclusion
+## 7. Benefits of MVC
 
-Our Stock Trading App follows the MVC architecture by separating the frontend (View), backend logic (Controller), and database models (Model). This improves code organization, scalability, and maintainability.
+- Separation of concerns
+- Better code organization
+- Improved maintainability
+- Easier debugging and testing
+- Supports collaborative development
+- Scalable architecture for future enhancements
+
+## 8. Summary
+
+The Stock Trading App follows the MVC architecture by separating the user interface, application logic, and database operations. React serves as the View, Express controllers implement the Controller, and MongoDB models represent the Model. This design enables modular development, simplifies maintenance, and supports efficient collaboration among team members.

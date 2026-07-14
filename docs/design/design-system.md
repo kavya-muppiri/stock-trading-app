@@ -1,4 +1,4 @@
-# SB Stocks – Paper Trading Platform
+# Stock Trading App – Paper Trading Platform
 ## Design Specification v1.0
 
 ---

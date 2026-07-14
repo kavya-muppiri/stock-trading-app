@@ -1,4 +1,4 @@
-# SB Stocks – Technical Architecture Documentation
+# Stock Trading App – Technical Architecture Documentation
 
 **Project:** SB Stocks – MERN Stack Paper Trading Application
 **Document Type:** System & Software Architecture Specification
