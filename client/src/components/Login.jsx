@@ -28,7 +28,7 @@ const Login = () => {
     if (res.success) {
       navigate("/home");
     } else {
-      setError("Invalid email or password.");
+      setError(res.message || "Invalid email or password.");
     }
   };
 

@@ -32,7 +32,7 @@ const Register = () => {
     if (res.success) {
       navigate("/home");
     } else {
-      setError("Registration failed. Please try again.");
+      setError(res.message || "Registration failed. Please try again.");
     }
   };
 

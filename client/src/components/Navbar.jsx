@@ -4,11 +4,9 @@ import {
   FiTrendingUp,
   FiMenu,
   FiX,
-  FiUser,
   FiLogOut,
   FiHome,
   FiPieChart,
-  FiClock,
 } from "react-icons/fi";
 import { useGeneralContext } from "../context/GeneralContext";
 
@@ -48,11 +46,6 @@ const Navbar = () => {
           <>
             <Link to="/home" className="sb-navlink"><FiHome size={16} /> Home</Link>
             <Link to="/portfolio" className="sb-navlink"><FiPieChart size={16} /> Portfolio</Link>
-            <Link to="/history" className="sb-navlink"><FiClock size={16} /> History</Link>
-            <Link to="/profile" className="sb-navlink"><FiUser size={16} /> Profile</Link>
-            {user.isAdmin && (
-              <Link to="/admin" className="sb-navlink">Admin</Link>
-            )}
             <span style={styles.balance}>
               ₹{Number(user.balance || 0).toLocaleString("en-IN")}
             </span>
@@ -82,11 +75,6 @@ const Navbar = () => {
             <>
               <Link to="/home" className="sb-navlink" onClick={() => setMenuOpen(false)}>Home</Link>
               <Link to="/portfolio" className="sb-navlink" onClick={() => setMenuOpen(false)}>Portfolio</Link>
-              <Link to="/history" className="sb-navlink" onClick={() => setMenuOpen(false)}>History</Link>
-              <Link to="/profile" className="sb-navlink" onClick={() => setMenuOpen(false)}>Profile</Link>
-              {user.isAdmin && (
-                <Link to="/admin" className="sb-navlink" onClick={() => setMenuOpen(false)}>Admin</Link>
-              )}
               <button style={styles.logoutBtn} onClick={handleLogout}>
                 <FiLogOut size={16} /> Logout
               </button>

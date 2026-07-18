@@ -1,106 +1,57 @@
+import mongoose from "mongoose";
 import User from "../models/User.js";
 import Stock from "../models/Stock.js";
 import Portfolio from "../models/Portfolio.js";
 import Transaction from "../models/Transaction.js";
 
-// Buy Stock
-export const buyStock = async (req, res) => {
-  try {
-    const { userId, stockId, quantity } = req.body;
+const isValidQuantity = (quantity) => Number.isInteger(quantity) && quantity > 0;
 
-    const user = await User.findById(userId);
-    const stock = await Stock.findById(stockId);
-
-    if (!user || !stock) {
-      return res.status(404).json({
-        message: "User or Stock not found",
-      });
-    }
-
-    const totalAmount = stock.currentPrice * quantity;
-
-    if (user.virtualBalance < totalAmount) {
-      return res.status(400).json({
-        message: "Insufficient Balance",
-      });
-    }
-
-    user.virtualBalance -= totalAmount;
-    await user.save();
-
-    let portfolio = await Portfolio.findOne({ userId, stockId });
-
-    if (portfolio) {
-      portfolio.quantity += quantity;
-      portfolio.averagePrice = stock.currentPrice;
-      await portfolio.save();
-    } else {
-      portfolio = await Portfolio.create({
-        userId,
-        stockId,
-        quantity,
-        averagePrice: stock.currentPrice,
-      });
-    }
-
-    await Transaction.create({
-      userId,
-      stockId,
-      type: "BUY",
-      quantity,
-      price: stock.currentPrice,
-      totalAmount,
-    });
-
-    res.status(200).json({
-      message: "Stock purchased successfully",
-      portfolio,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+const trade = async (req, res, type) => {
+  const { stockId, quantity } = req.body;
+  if (!mongoose.isValidObjectId(stockId) || !isValidQuantity(quantity)) {
+    return res.status(400).json({ message: "A valid stock ID and whole-number quantity are required" });
   }
-};
-// Sell Stock
-export const sellStock = async (req, res) => {
+
+  const session = await mongoose.startSession();
   try {
-    const { userId, stockId, quantity } = req.body;
-
-    const user = await User.findById(userId);
-    const stock = await Stock.findById(stockId);
-
-    const portfolio = await Portfolio.findOne({ userId, stockId });
-
-    if (!portfolio || portfolio.quantity < quantity) {
-      return res.status(400).json({
-        message: "Not enough stocks to sell",
-      });
-    }
-
-    const totalAmount = stock.currentPrice * quantity;
-
-    portfolio.quantity -= quantity;
-    await portfolio.save();
-
-    user.virtualBalance += totalAmount;
-    await user.save();
-
-    await Transaction.create({
-      userId,
-      stockId,
-      type: "SELL",
-      quantity,
-      price: stock.currentPrice,
-      totalAmount,
+    let result;
+    await session.withTransaction(async () => {
+      const user = await User.findById(req.user._id).session(session);
+      const stock = await Stock.findById(stockId).session(session);
+      if (!user || !stock) {
+        const error = new Error("Stock not found"); error.statusCode = 404; throw error;
+      }
+      const totalAmount = stock.currentPrice * quantity;
+      let portfolio = await Portfolio.findOne({ userId: user._id, stockId }).session(session);
+      if (type === "BUY") {
+        if (user.virtualBalance < totalAmount) {
+          const error = new Error("Insufficient balance"); error.statusCode = 400; throw error;
+        }
+        user.virtualBalance -= totalAmount;
+        if (portfolio) {
+          const newQuantity = portfolio.quantity + quantity;
+          portfolio.averagePrice = ((portfolio.averagePrice * portfolio.quantity) + totalAmount) / newQuantity;
+          portfolio.quantity = newQuantity;
+        } else portfolio = new Portfolio({ userId: user._id, stockId, quantity, averagePrice: stock.currentPrice });
+        await portfolio.save({ session });
+      } else {
+        if (!portfolio || portfolio.quantity < quantity) {
+          const error = new Error("Not enough shares to sell"); error.statusCode = 400; throw error;
+        }
+        portfolio.quantity -= quantity;
+        user.virtualBalance += totalAmount;
+        if (portfolio.quantity === 0) await portfolio.deleteOne({ session });
+        else await portfolio.save({ session });
+      }
+      await user.save({ session });
+      const created = await Transaction.create([{ userId: user._id, stockId, type, quantity, price: stock.currentPrice, totalAmount }], { session });
+      result = { transaction: created[0], balance: user.virtualBalance };
     });
-
-    res.status(200).json({
-      message: "Stock sold successfully",
-    });
+    return res.status(201).json({ message: `${type === "BUY" ? "Stock purchased" : "Stock sold"} successfully`, ...result });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
-  }
+    return res.status(error.statusCode || 500).json({ message: error.message || "Unable to complete trade" });
+  } finally { await session.endSession(); }
 };
+
+export const buyStock = (req, res) => trade(req, res, "BUY");
+export const sellStock = (req, res) => trade(req, res, "SELL");

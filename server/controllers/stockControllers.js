@@ -7,6 +7,7 @@ export const getAllStocks = async (req, res) => {
 
     res.status(200).json(stocks);
   } catch (error) {
+    if (error.name === "CastError") return res.status(400).json({ message: "Invalid stock ID" });
     res.status(500).json({
       message: error.message,
     });

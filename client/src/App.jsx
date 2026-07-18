@@ -1,34 +1,47 @@
 
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useGeneralContext } from "./context/GeneralContext";
 
 import Landing from "./pages/Landing";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
-import History from "./pages/History";
-import Users from "./pages/Users";
-import AllOrders from "./pages/AllOrders";
-import AllTransactions from "./pages/AllTransactions";
-import Admin from "./pages/Admin";
-import AdminStockChart from "./pages/AdminStockChart";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Portfolio from "./pages/Portfolio";
+import StockChart from "./pages/StockChart";
+
+const ProtectedRoute = ({ children }) => {
+  const { user, loadingAuth } = useGeneralContext();
+  if (loadingAuth) return <p style={{ padding: "24px" }}>Loading...</p>;
+  return user ? children : <Navigate to="/login" replace />;
+};
+
+const AccountData = ({ children }) => {
+  const { refreshAccountData, user } = useGeneralContext();
+  useEffect(() => { if (user) refreshAccountData().catch(() => {}); }, [user, refreshAccountData]);
+  return children;
+};
 
 function App() {
+  const { user } = useGeneralContext();
+  const location = useLocation();
+  const showNavbar = user && !["/login", "/register"].includes(location.pathname);
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/Login" element={<Login />} />
-      <Route path="/Register" element={<Register />} />
-      <Route path="/Dashboard" element={<Dashboard />} />
-      <Route path="/Profile" element={<Profile />} />
-      <Route path="/History" element={<History />} />
-      <Route path="/Users" element={<Users />} />
-      <Route path="/AllOrders" element={<AllOrders />} />
-      <Route path="/AllTransactions" element={<AllTransactions />} />
-      <Route path="/Admin" element={<Admin />} />
-      <Route path="/AdminStockChart" element={<AdminStockChart />} />
-    </Routes>
+    <AccountData>
+      {showNavbar && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
+        <Route path="/stock/:symbol" element={<ProtectedRoute><StockChart /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<Navigate to="/home" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AccountData>
   );
 }
 

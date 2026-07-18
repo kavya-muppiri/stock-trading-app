@@ -11,9 +11,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useGeneralContext } from "../context/GeneralContext";
-import axiosInstance from "../api/axiosInstance";
 
 const RANGES = ["1D", "1W", "1M", "3M", "1Y"];
+const POINTS_FOR_RANGE = { "1D": 24, "1W": 7, "1M": 30, "3M": 90, "1Y": 52 };
 
 const generateHistory = (basePrice, points) => {
   const data = [];
@@ -33,7 +33,7 @@ const generateHistory = (basePrice, points) => {
 const StockChart = () => {
   const { symbol } = useParams();
   const navigate = useNavigate();
-  const { stocks, user, setPortfolio, setTransactions, setUser } = useGeneralContext();
+  const { stocks, user, placeTrade } = useGeneralContext();
   const [range, setRange] = useState("1M");
   const [orderType, setOrderType] = useState(null);
   const [qty, setQty] = useState(1);
@@ -44,9 +44,8 @@ const StockChart = () => {
     [stocks, symbol]
   );
 
-  const pointsForRange = { "1D": 24, "1W": 7, "1M": 30, "3M": 90, "1Y": 52 };
   const chartData = useMemo(
-    () => generateHistory(stock ? stock.price : 1000, pointsForRange[range]),
+    () => generateHistory(stock ? stock.price : 1000, POINTS_FOR_RANGE[range]),
     [stock, range]
   );
 
@@ -76,62 +75,15 @@ const StockChart = () => {
 
   const handleConfirm = async () => {
     if (qty <= 0) return;
-    const totalCost = stock.price * qty;
-
     try {
-      await axiosInstance.post("/orders", {
-        symbol: stock.symbol,
-        type: orderType,
-        qty,
-        price: stock.price,
-      });
+      await placeTrade(orderType, stock.id, qty);
+      setMessage(`${orderType} order placed for ${qty} share(s) of ${stock.symbol}.`);
+      setTimeout(() => closeOrder(), 1200);
+      return;
     } catch (err) {
-      // backend unavailable, proceed with local mock update
+      setMessage(err.response?.data?.message || "Unable to place this order.");
+      return;
     }
-
-    setTransactions((prev) => [
-      {
-        id: `t${Date.now()}`,
-        symbol: stock.symbol,
-        type: orderType,
-        qty,
-        price: stock.price,
-        date: new Date().toISOString(),
-      },
-      ...prev,
-    ]);
-
-    setPortfolio((prev) => {
-      const existing = prev.find((p) => p.symbol === stock.symbol);
-      if (orderType === "BUY") {
-        if (existing) {
-          const newQty = existing.qty + qty;
-          const newAvg = (existing.avgPrice * existing.qty + stock.price * qty) / newQty;
-          return prev.map((p) =>
-            p.symbol === stock.symbol ? { ...p, qty: newQty, avgPrice: newAvg } : p
-          );
-        }
-        return [
-          ...prev,
-          { symbol: stock.symbol, name: stock.name, qty, avgPrice: stock.price, currentPrice: stock.price },
-        ];
-      } else {
-        if (existing) {
-          const remaining = existing.qty - qty;
-          if (remaining <= 0) return prev.filter((p) => p.symbol !== stock.symbol);
-          return prev.map((p) => (p.symbol === stock.symbol ? { ...p, qty: remaining } : p));
-        }
-        return prev;
-      }
-    });
-
-    if (user) {
-      const delta = orderType === "BUY" ? -totalCost : totalCost;
-      setUser({ ...user, balance: Number(user.balance || 0) + delta });
-    }
-
-    setMessage(`${orderType} order placed for ${qty} share(s) of ${stock.symbol}.`);
-    setTimeout(() => closeOrder(), 1200);
   };
 
   return (

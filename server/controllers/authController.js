@@ -2,6 +2,14 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 
+const userResponse = (user) => ({
+  _id: user._id,
+  name: user.name,
+  email: user.email,
+  balance: user.virtualBalance,
+  role: user.role,
+});
+
 // Register User
 export const registerUser = async (req, res) => {
   try {
@@ -13,7 +21,12 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    const userExists = await User.findOne({ email });
+    if (password.length < 8) {
+      return res.status(400).json({ message: "Password must be at least 8 characters" });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const userExists = await User.findOne({ email: normalizedEmail });
 
     if (userExists) {
       return res.status(400).json({
@@ -26,17 +39,11 @@ export const registerUser = async (req, res) => {
 
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
     });
 
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      virtualBalance: user.virtualBalance,
-      token: generateToken(user._id),
-    });
+    res.status(201).json({ user: userResponse(user), token: generateToken(user._id) });
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -56,17 +63,11 @@ export const loginUser = async (req, res) => {
     }
 
     // Find user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
 
     // Check password
     if (user && (await bcrypt.compare(password, user.password))) {
-      return res.status(200).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        virtualBalance: user.virtualBalance,
-        token: generateToken(user._id),
-      });
+      return res.status(200).json({ user: userResponse(user), token: generateToken(user._id) });
     }
 
     res.status(401).json({
@@ -77,4 +78,8 @@ export const loginUser = async (req, res) => {
       message: error.message,
     });
   }
+};
+
+export const getCurrentUser = async (req, res) => {
+  res.json({ user: userResponse(req.user) });
 };

@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
 
     password: {
@@ -21,6 +23,13 @@ const userSchema = new mongoose.Schema(
     virtualBalance: {
       type: Number,
       default: 100000,
+      min: 0,
+    },
+
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
     },
 
     watchlist: [

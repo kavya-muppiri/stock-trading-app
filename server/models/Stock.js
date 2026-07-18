@@ -16,6 +16,7 @@ const stockSchema = new mongoose.Schema(
     currentPrice: {
       type: Number,
       required: true,
+      min: 0,
     },
 
     change: {

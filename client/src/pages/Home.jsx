@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiSearch, FiArrowUp, FiArrowDown, FiX } from "react-icons/fi";
 import { useGeneralContext } from "../context/GeneralContext";
-import axiosInstance from "../api/axiosInstance";
 
 const Home = () => {
-  const { user, stocks, setPortfolio, setTransactions, setUser } = useGeneralContext();
+  const { user, stocks, placeTrade } = useGeneralContext();
   const [search, setSearch] = useState("");
   const [selectedStock, setSelectedStock] = useState(null);
   const [orderType, setOrderType] = useState("BUY");
@@ -32,72 +31,15 @@ const Home = () => {
 
   const handlePlaceOrder = async () => {
     if (!selectedStock || qty <= 0) return;
-    const totalCost = selectedStock.price * qty;
-
     try {
-      await axiosInstance.post("/orders", {
-        symbol: selectedStock.symbol,
-        type: orderType,
-        qty,
-        price: selectedStock.price,
-      });
+      await placeTrade(orderType, selectedStock.id, qty);
+      setMessage(`${orderType} order placed successfully for ${qty} share(s) of ${selectedStock.symbol}.`);
+      setTimeout(() => closeModal(), 1200);
+      return;
     } catch (err) {
-      // backend unavailable, proceed with local mock update
+      setMessage(err.response?.data?.message || "Unable to place this order.");
+      return;
     }
-
-    setTransactions((prev) => [
-      {
-        id: `t${Date.now()}`,
-        symbol: selectedStock.symbol,
-        type: orderType,
-        qty,
-        price: selectedStock.price,
-        date: new Date().toISOString(),
-      },
-      ...prev,
-    ]);
-
-    setPortfolio((prev) => {
-      const existing = prev.find((p) => p.symbol === selectedStock.symbol);
-      if (orderType === "BUY") {
-        if (existing) {
-          const newQty = existing.qty + qty;
-          const newAvg = (existing.avgPrice * existing.qty + selectedStock.price * qty) / newQty;
-          return prev.map((p) =>
-            p.symbol === selectedStock.symbol ? { ...p, qty: newQty, avgPrice: newAvg } : p
-          );
-        }
-        return [
-          ...prev,
-          {
-            symbol: selectedStock.symbol,
-            name: selectedStock.name,
-            qty,
-            avgPrice: selectedStock.price,
-            currentPrice: selectedStock.price,
-          },
-        ];
-      } else {
-        if (existing) {
-          const remaining = existing.qty - qty;
-          if (remaining <= 0) {
-            return prev.filter((p) => p.symbol !== selectedStock.symbol);
-          }
-          return prev.map((p) =>
-            p.symbol === selectedStock.symbol ? { ...p, qty: remaining } : p
-          );
-        }
-        return prev;
-      }
-    });
-
-    if (user) {
-      const delta = orderType === "BUY" ? -totalCost : totalCost;
-      setUser({ ...user, balance: Number(user.balance || 0) + delta });
-    }
-
-    setMessage(`${orderType} order placed successfully for ${qty} share(s) of ${selectedStock.symbol}.`);
-    setTimeout(() => closeModal(), 1200);
   };
 
   return (

@@ -18,6 +18,8 @@ const portfolioSchema = new mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
+      min: 0,
+      validate: { validator: Number.isInteger, message: "Quantity must be a whole number" },
     },
 
     averagePrice: {
@@ -29,6 +31,8 @@ const portfolioSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+portfolioSchema.index({ userId: 1, stockId: 1 }, { unique: true });
 
 const Portfolio = mongoose.model("Portfolio", portfolioSchema);
 
